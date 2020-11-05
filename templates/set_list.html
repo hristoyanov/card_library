@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block site_content %}
+    {% for set in sets %}
+        <img src="{{ set.image_url }}">
+        <p>Cards: {{ set.card_count }}</p>
+    {% endfor %}
+{% endblock %}

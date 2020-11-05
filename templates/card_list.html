@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block site_content %}
+    {% for card in cards %}
+        <img src="{{ card.image_url }}">
+    {% endfor %}
+{% endblock %}
