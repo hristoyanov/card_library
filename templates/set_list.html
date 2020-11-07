@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
-{% block site_content %}
-    {% for set in sets %}
-        <img src="{{ set.image_url }}">
-        <p>Cards: {{ set.card_count }}</p>
-    {% endfor %}
+
+{% block title %}All sets{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">All sets</h1>
+    <div class="d-flex p-3">
+        {% for set in sets %}
+            {% include 'partials/set_details.html' with set=set %}
+        {% endfor %}
+    </div>
 {% endblock %}

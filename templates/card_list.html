@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
-{% block site_content %}
-    {% for card in cards %}
-        <img src="{{ card.image_url }}">
-    {% endfor %}
+
+{% block title %}Card list{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">Cards:</h1>
+    <div class="d-flex p-3">
+        {% for card in cards %}
+            <img src="{{ card.image_url }}">
+        {% endfor %}
+    </div>
 {% endblock %}

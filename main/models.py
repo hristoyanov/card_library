@@ -7,9 +7,6 @@ class ExpansionSet(models.Model):
     card_count = models.PositiveIntegerField(blank=False)
     image_url = models.URLField(blank=False)
 
-    def __str__(self):
-        return f'{self.name}'
-
 
 class Card(models.Model):
     hero_classes = [
@@ -42,4 +39,4 @@ class Card(models.Model):
     expansion_set = models.ForeignKey(ExpansionSet, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.name}'
+        return self.name
