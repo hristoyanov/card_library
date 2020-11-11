@@ -6,7 +6,7 @@
     <h1 class="text-center">Cards:</h1>
     <div class="d-flex p-3">
         {% for card in cards %}
-            <img src="{{ card.image_url }}">
+            <img src="{{ card.image.url }}">
         {% endfor %}
     </div>
 {% endblock %}
