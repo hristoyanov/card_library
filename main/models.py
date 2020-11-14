@@ -34,7 +34,15 @@ class Card(models.Model):
         ('legendary', 'Legendary'),
     ]
 
+    card_types = [
+        ('minion', 'Minion'),
+        ('spell', 'Spell'),
+        ('weapon', 'Weapon'),
+        ('hero_card', 'Hero Card'),
+    ]
+
     name = models.CharField(max_length=30, blank=False)
+    card_type = models.CharField(max_length=9, blank=False, choices=card_types)
     hero_class = models.CharField(max_length=12, blank=False, choices=hero_classes)
     mana_cost = models.PositiveIntegerField(blank=False)
     rarity = models.CharField(max_length=9, blank=False, choices=rarities)

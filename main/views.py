@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from main.models import ExpansionSet
+from main.models import ExpansionSet, Card
 
 
 # Create your views here.
@@ -29,3 +29,11 @@ def expansion_card_list(request, pk):
     }
 
     return render(request, 'card_list.html', context)
+
+
+def card_info(request, pk):
+    context = {
+        'card': Card.objects.get(pk=pk),
+    }
+
+    return render(request, 'card_info.html', context)

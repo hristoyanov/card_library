@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Card details{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="card m-3" style="width: 18rem;">
+            <img class="card-img-top" src="{{ card.image.url }}" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">{{ card.name }}</h5>
+                <p class="card-text text-center">Type: {{ card.card_type|title }}</p>
+                <p class="card-text">Class: {{ card.hero_class|title }}</p>
+                <p class="card-text">Mana cost: {{ card.mana_cost }}</p>
+                <p class="card-text">Rarity: {{ card.rarity|title }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="text-center">
+        <a href="{% url 'card_list' card.expansion_set.id %}" class="btn btn-primary">Go back</a>
+    </div>
+{% endblock %}

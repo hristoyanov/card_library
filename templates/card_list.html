@@ -3,10 +3,18 @@
 {% block title %}Card list{% endblock %}
 
 {% block content %}
-    <h1 class="text-center">Cards:</h1>
-    <div class="d-flex p-3">
+    <div class="row">
         {% for card in cards %}
-            <img src="{{ card.image.url }}">
+            <div class="col-md-3">
+                <div class="card m-3" style="width: 18rem;">
+                    <img class="card-img-top" src="{{ card.image.url }}" alt="Card image cap">
+                    <div class="card-body">
+                        <div class="text-center">
+                            <a href="{% url 'card_info' card.id %}" class="btn btn-primary">Card details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% endfor %}
     </div>
 {% endblock %}
