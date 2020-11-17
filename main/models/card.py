@@ -1,14 +1,5 @@
 from django.db import models
-
-
-# Create your models here.
-class ExpansionSet(models.Model):
-    name = models.CharField(max_length=50, blank=False)
-    card_count = models.PositiveIntegerField(blank=False)
-    image = models.ImageField(upload_to='card_set_images', blank=False)
-
-    def __str__(self):
-        return self.name
+from main.models.expansion_set import ExpansionSet
 
 
 class Card(models.Model):
