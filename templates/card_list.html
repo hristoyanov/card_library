@@ -3,19 +3,21 @@
 {% block title %}Card list{% endblock %}
 
 {% block content %}
-    <div class="row">
-        {% for card in cards %}
-            <div class="col-md-3">
-                <div class="card m-3" style="width: 18rem;">
-                    <img class="card-img-top" src="{{ card.image.url }}" alt="Card image cap">
-                    <div class="card-body">
-                        <div class="text-center">
-                            <a href="{% url 'card_info' card.id %}" class="btn btn-primary">Card details</a>
-                            <a href="{% url 'add_card' card.id %}" class="btn btn-primary">Add card</a>
+    <div class="container">
+        <div class="row">
+            {% for card in cards %}
+                <div class="col-md-3">
+                    <div class="card m-3">
+                        <img class="card-img-top" src="{{ card.image.url }}" alt="Card image cap">
+                        <div class="card-body">
+                            <div class="text-center">
+                                <a href="{% url 'card_info' card.id %}" class="btn btn-primary btn-sm">Card details</a>
+                                <a href="{% url 'add_card' card.id %}" class="btn btn-primary btn-sm">Add card</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

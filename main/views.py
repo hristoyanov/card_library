@@ -14,7 +14,7 @@ def index(request):
 
 def expansion_set_list(request):
     context = {
-        'sets': ExpansionSet.objects.order_by('name'),
+        'sets': ExpansionSet.objects.order_by('-release_date'),
     }
 
     return render(request, 'set_list.html', context)
