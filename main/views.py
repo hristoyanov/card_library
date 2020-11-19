@@ -4,6 +4,7 @@ from main.models.card import Card
 from main.models.collection_card import CollectionCard
 from main.models.custom_user import CustomUser
 from main.forms import AddCardForm
+from main_core.decorators import group_required
 
 
 # Create your views here.
@@ -39,6 +40,7 @@ def card_info(request, pk):
     return render(request, 'card_info.html', context)
 
 
+@group_required(groups=['Regular User'])
 def add_card(request, pk):
     card = Card.objects.get(pk=pk)
 
@@ -77,6 +79,7 @@ def add_card(request, pk):
         return render(request, 'add_card.html', context)
 
 
+@group_required(groups=['Regular User'])
 def custom_user_collection(request, pk):
     user = CustomUser.objects.get(pk=pk)
     cards = user.collectioncard_set.order_by('card__expansion_set__name', 'card__hero_class', 'card__name')
