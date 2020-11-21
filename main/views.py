@@ -2,8 +2,7 @@ from django.shortcuts import render, redirect
 from main.models.expansion_set import ExpansionSet
 from main.models.card import Card
 from main.models.collection_card import CollectionCard
-from main.models.custom_user import CustomUser
-from main.forms import AddCardForm
+from main.forms import ChangeCardCountForm
 from main_core.decorators import group_required
 
 
@@ -45,7 +44,7 @@ def add_card(request, pk):
     card = Card.objects.get(pk=pk)
 
     if request.method == 'GET':
-        form = AddCardForm()
+        form = ChangeCardCountForm()
 
         context = {
             'form': form,
@@ -54,11 +53,11 @@ def add_card(request, pk):
 
         return render(request, 'add_card.html', context)
     else:
-        form = AddCardForm(request.POST)
+        form = ChangeCardCountForm(request.POST)
 
         if form.is_valid():
-            user = form.cleaned_data['user']
-            copies_to_add = form.cleaned_data['copies_to_add']
+            user = request.user
+            copies_to_add = form.cleaned_data['count']
             result = user.collectioncard_set.filter(card__name=card.name)
 
             if result:
@@ -80,8 +79,90 @@ def add_card(request, pk):
 
 
 @group_required(groups=['Regular User'])
-def custom_user_collection(request, pk):
-    user = CustomUser.objects.get(pk=pk)
+def increase_collected_card_count(request, pk):
+    card = request.user.collectioncard_set.get(pk=pk)
+
+    if request.method == 'GET':
+        form = ChangeCardCountForm()
+
+        context = {
+            'form': form,
+            'card': card,
+        }
+
+        return render(request, 'add_copies.html', context)
+    else:
+        form = ChangeCardCountForm(request.POST)
+
+        if form.is_valid():
+            copies_to_add = form.cleaned_data['count']
+
+            card.copies += copies_to_add
+            card.save()
+
+            return redirect('user_collection')
+
+        context = {
+            'form': form,
+            'card': card,
+        }
+
+        return render(request, 'add_copies.html', context)
+
+
+@group_required(groups=['Regular User'])
+def remove_collected_card_copies(request, pk):
+    card = request.user.collectioncard_set.get(pk=pk)
+
+    if request.method == 'GET':
+        form = ChangeCardCountForm()
+
+        context = {
+            'form': form,
+            'card': card,
+        }
+
+        return render(request, 'remove_copies.html', context)
+    else:
+        form = ChangeCardCountForm(request.POST)
+
+        if form.is_valid():
+            copies_to_remove = form.cleaned_data['count']
+
+            if card.copies <= copies_to_remove:
+                card.delete()
+            else:
+                card.copies -= copies_to_remove
+                card.save()
+
+            return redirect('user_collection')
+
+        context = {
+            'form': form,
+            'card': card,
+        }
+
+        return render(request, 'remove_copies.html', context)
+
+
+@group_required(groups=['Regular User'])
+def delete_collection_card(request, pk):
+    card = request.user.collectioncard_set.get(pk=pk)
+
+    if request.method == 'GET':
+        context = {
+            'card': card,
+        }
+
+        return render(request, 'delete_user_card.html', context)
+    else:
+        card.delete()
+        return redirect('user_collection')
+
+
+@group_required(groups=['Regular User'])
+def user_collection(request):
+    user = request.user
     cards = user.collectioncard_set.order_by('card__expansion_set__name', 'card__hero_class', 'card__name')
 
     context = {

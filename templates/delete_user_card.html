@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Card{% endblock %}
+
+{% block content %}
+    <h1>Remove card and all copies from your collection?</h1>
+    <div class="container">
+        <div class="items-container">
+            <div class="item">
+                <img src="{{ card.card.image.url }}" alt="Image of {{ card.card.name }}">
+                <p class="text-center">Copies owned: {{ card.copies }}</p>
+                <form action="{% url 'delete_user_card' card.id %}" method="post">
+                    <div class="text-center">
+                        {% csrf_token %}
+                        <button class="btn btn-danger btn-sm">Delete</button>
+                    </div>
+                </form>
+                <div class="text-center">
+                    <a class="btn btn-primary btn-sm mt-2" href="javascript:history.back()">No, go back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

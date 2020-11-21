@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="text-center">Login</h1>
+        <div class="items-container">
+            <div class="item">
+                <form method="POST" action="{% url 'login_user' %}">
+                    <input type="hidden" name="return_url" value="{{ request.GET.next }}"/>
+                    {% csrf_token %}
+                    {{ login_form }}
+                    <div class="text-center">
+                        <button class="btn btn-primary mt-3">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

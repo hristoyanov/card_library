@@ -5,7 +5,7 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'index' %}">Home</a>
             </li>
@@ -14,16 +14,26 @@
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Hello, {{ user.username }}!</a>
+                    <a class="nav-link" href="{% url 'user_collection' %}">My cards</a>
                 </li>
             {% endif %}
         </ul>
-    </div>
-    <div class="nav-item float-right">
-        {% if user.is_authenticated %}
-            <a class="nav-link" href="{% url 'logout_user' %}">Logout</a>
-        {% else %}
-            <a class="nav-link" href="{% url 'login_user' %}">Login</a>
-        {% endif %}
+        <ul class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
+                <li class="nav-item float-right">
+                    <a class="nav-link" href="#">Hello, {{ user.username }}!</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout_user' %}">Logout</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login_user' %}">Log in</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register_user' %}">Sign up</a>
+                </li>
+            {% endif %}
+        </ul>
     </div>
 </nav>

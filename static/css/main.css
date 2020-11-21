@@ -1,3 +1,27 @@
+h1, h2 {
+    text-align: center;
+    margin: 10px;
+}
+
+div.items-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 20px;
+}
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+form label {
+    font-weight: bolder;
+    text-align: center;
+    margin: 5px;
+}
+
 .card {
     text-align: center;
 }

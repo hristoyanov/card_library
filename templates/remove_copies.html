@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 
-{% block title %}Add card{% endblock %}
+{% block title %}Remove copies{% endblock %}
 
 {% block content %}
     <div class="container">
         <div class="items-container">
             <div class="item">
-                <img src="{{ card.image.url }}" alt="Image of {{ card.name }}.">
-                <form method="POST" action="{% url 'add_card' card.id %}">
+                <img src="{{ card.card.image.url }}" alt="Image of {{ card.name }}.">
+                <form method="POST" action="{% url 'remove_copies' card.id %}">
                     {% csrf_token %}
                     {{ form }}
                     <div class="text-center">
-                        <button class="btn btn-primary mt-3">Add card</button>
+                        <button class="btn btn-primary mt-3">Remove</button>
                     </div>
                 </form>
             </div>
