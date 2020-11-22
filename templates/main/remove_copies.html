@@ -15,7 +15,8 @@
                     {% csrf_token %}
                     {{ form }}
                     <div class="text-center">
-                        <button class="btn btn-primary mt-3">Remove</button>
+                        <button class="btn btn-primary btn-sm mt-3">Remove</button>
+                        <a href="{% url 'user_collection' %}" class="btn btn-primary btn-sm mt-3">Go back</a>
                     </div>
                 </form>
             </div>

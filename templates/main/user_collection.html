@@ -3,23 +3,7 @@
 {% block title %}My collection{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            {% for card in cards %}
-                <div class="col-md-3">
-                    <div class="card m-3">
-                        <img class="card-img-top" src="{{ card.card.image.url }}" alt="Card image cap">
-                        <div class="card-body">
-                            <p class="card-text">Copies owned: {{ card.copies }}</p>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <a href="{% url 'add_copies' card.id %}" class="btn btn-primary btn-sm">Add</a>
-                        <a href="{% url 'remove_copies' card.id %}" class="btn btn-primary btn-sm">Remove</a>
-                        <a href="{% url 'delete_user_card' card.id %}" class="btn btn-danger btn-sm">Delete</a>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
+    {% include 'main/../partials/exp_set_select.html' %}
+    <h1>All collected cards:</h1>
+    {% include 'main/../partials/cards_partial.html' %}
 {% endblock %}

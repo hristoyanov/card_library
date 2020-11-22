@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from main.models.expansion_set import ExpansionSet
 from main.models.card import Card
 from main.models.collection_card import CollectionCard
-from main.forms import ChangeCardCountForm
+from main.forms import ChangeCardCountForm, SelectExpSetForm
 from main_core.decorators import group_required
 
 
@@ -175,11 +175,26 @@ def delete_collection_card(request, pk):
 @group_required(groups=['Regular User'])
 def user_collection(request):
     user = request.user
-    cards = user.collectioncard_set.order_by('card__expansion_set__name', 'card__hero_class', 'card__name')
 
-    context = {
-        'user': user,
-        'cards': cards,
-    }
+    if request.method == 'GET':
+        context = {
+            'form': SelectExpSetForm(),
+            'cards': user.collectioncard_set.order_by('card__expansion_set__name', 'card__hero_class', 'card__name'),
+        }
 
-    return render(request, 'main/user_collection.html', context)
+        return render(request, 'main/user_collection.html', context)
+    else:
+        form = SelectExpSetForm(request.POST)
+
+        if form.is_valid():
+            exp_set = form.cleaned_data['expansion_set']
+            cards = user.collectioncard_set.filter(card__expansion_set=exp_set)
+
+            context = {
+                'exp_set': exp_set,
+                'cards': cards,
+            }
+
+            return render(request, 'main/exp_set_collection.html', context)
+
+        return render(request, 'main/user_collection.html', context={'form': form})
