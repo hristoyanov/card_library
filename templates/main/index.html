@@ -4,4 +4,22 @@
 
 {% block content %}
     <h1 class="text-center ">Hearthstone Collection Tracker</h1>
+    <div class="float-left mt-5 ml-4">
+        <h2>Latest sets:</h2>
+    </div>
+    <div class="float-left mx-3">
+        <div class="row">
+            {% for set in sets %}
+                <div class="col-md-4 col-sm-4">
+                    <div class="card m-3">
+                        <img class="card-img-top" src="{{ set.image.url }}" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ set.name }}</h5>
+                            <a href="{% url 'card_list' set.id %}" class="btn btn-primary">See cards</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

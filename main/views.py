@@ -8,7 +8,9 @@ from main_core.decorators import group_required
 
 # Create your views here.
 def index(request):
-    return render(request, 'main/index.html')
+    sets = ExpansionSet.objects.order_by('-release_date')[:3]
+
+    return render(request, 'main/index.html', context={'sets': sets})
 
 
 def expansion_set_list(request):
