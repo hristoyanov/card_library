@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'common/base.html' %}
 
 {% block title %}Remove copies{% endblock %}
 
@@ -7,6 +7,10 @@
         <div class="items-container">
             <div class="item">
                 <img src="{{ card.card.image.url }}" alt="Image of {{ card.name }}.">
+            </div>
+        </div>
+        <div class="items-container">
+            <div class="item">
                 <form method="POST" action="{% url 'remove_copies' card.id %}">
                     {% csrf_token %}
                     {{ form }}

@@ -8,7 +8,7 @@ from main_core.decorators import group_required
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'main/index.html')
 
 
 def expansion_set_list(request):
@@ -16,7 +16,7 @@ def expansion_set_list(request):
         'sets': ExpansionSet.objects.order_by('-release_date'),
     }
 
-    return render(request, 'set_list.html', context)
+    return render(request, 'main/set_list.html', context)
 
 
 def expansion_card_list(request, pk):
@@ -28,7 +28,7 @@ def expansion_card_list(request, pk):
         'cards': cards,
     }
 
-    return render(request, 'card_list.html', context)
+    return render(request, 'main/card_list.html', context)
 
 
 def card_info(request, pk):
@@ -36,7 +36,7 @@ def card_info(request, pk):
         'card': Card.objects.get(pk=pk),
     }
 
-    return render(request, 'card_info.html', context)
+    return render(request, 'main/card_info.html', context)
 
 
 @group_required(groups=['Regular User'])
@@ -51,7 +51,7 @@ def add_card(request, pk):
             'card': card,
         }
 
-        return render(request, 'add_card.html', context)
+        return render(request, 'main/add_card.html', context)
     else:
         form = ChangeCardCountForm(request.POST)
 
@@ -75,7 +75,7 @@ def add_card(request, pk):
             'card': card,
         }
 
-        return render(request, 'add_card.html', context)
+        return render(request, 'main/add_card.html', context)
 
 
 @group_required(groups=['Regular User'])
@@ -90,7 +90,7 @@ def increase_collected_card_count(request, pk):
             'card': card,
         }
 
-        return render(request, 'add_copies.html', context)
+        return render(request, 'main/add_copies.html', context)
     else:
         form = ChangeCardCountForm(request.POST)
 
@@ -107,7 +107,7 @@ def increase_collected_card_count(request, pk):
             'card': card,
         }
 
-        return render(request, 'add_copies.html', context)
+        return render(request, 'main/add_copies.html', context)
 
 
 @group_required(groups=['Regular User'])
@@ -122,17 +122,27 @@ def remove_collected_card_copies(request, pk):
             'card': card,
         }
 
-        return render(request, 'remove_copies.html', context)
+        return render(request, 'main/remove_copies.html', context)
     else:
         form = ChangeCardCountForm(request.POST)
 
         if form.is_valid():
-            copies_to_remove = form.cleaned_data['count']
+            if card.copies < form.cleaned_data['count']:
+                form.add_error('count', 'You can not delete more copies than you already own.')
 
-            if card.copies <= copies_to_remove:
+                context = {
+                    'form': form,
+                    'card': card,
+                }
+
+                return render(request, 'main/remove_copies.html', context)
+
+            copies_to_remove = form.cleaned_data['count']
+            card.copies -= copies_to_remove
+
+            if card.copies == 0:
                 card.delete()
             else:
-                card.copies -= copies_to_remove
                 card.save()
 
             return redirect('user_collection')
@@ -142,7 +152,7 @@ def remove_collected_card_copies(request, pk):
             'card': card,
         }
 
-        return render(request, 'remove_copies.html', context)
+        return render(request, 'main/remove_copies.html', context)
 
 
 @group_required(groups=['Regular User'])
@@ -154,7 +164,7 @@ def delete_collection_card(request, pk):
             'card': card,
         }
 
-        return render(request, 'delete_user_card.html', context)
+        return render(request, 'main/delete_user_card.html', context)
     else:
         card.delete()
         return redirect('user_collection')
@@ -170,4 +180,4 @@ def user_collection(request):
         'cards': cards,
     }
 
-    return render(request, 'user_collection.html', context)
+    return render(request, 'main/user_collection.html', context)
