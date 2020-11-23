@@ -1,21 +1,21 @@
 {% extends 'common/base.html' %}
 
-{% block title %}Add card{% endblock %}
+{% block title %}Missing cards{% endblock %}
 
 {% block content %}
     <div class="container">
         <div class="items-container">
             <div class="item">
-                <img src="{{ card.image.url }}" alt="Image of {{ card.name }}.">
-                <form method="POST" action="{% url 'add_card' card.id %}">
-                    <input type="hidden" name="next" value="{{ request.path }}"/>
+                <form method="POST" action="{% url 'missing_set_cards' %}">
                     {% csrf_token %}
                     {{ form }}
                     <div class="text-center">
-                        <button class="btn btn-primary mt-3">Add card</button>
+                        <button class="btn btn-primary btn-sm mt-3">Submit</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <h1>Missing cards:</h1>
+    {% include 'partials/card_loop_detailed.html' %}
 {% endblock %}

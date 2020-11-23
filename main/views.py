@@ -7,6 +7,9 @@ from main_core.decorators import group_required
 
 
 # Create your views here.
+from main_core.reusables import get_card_list
+
+
 def index(request):
     sets = ExpansionSet.objects.order_by('-release_date')[:3]
 
@@ -198,3 +201,33 @@ def user_collection(request):
             return render(request, 'main/exp_set_collection.html', context)
 
         return render(request, 'main/user_collection.html', context={'form': form})
+
+
+@group_required(groups=['Regular User'])
+def missing_cards_list(request):
+    user = request.user
+
+    if request.method == 'GET':
+        missing_cards = get_card_list(user)
+
+        context = {
+            'form': SelectExpSetForm(),
+            'cards': missing_cards,
+        }
+
+        return render(request, 'main/missing_cards.html', context)
+    else:
+        form = SelectExpSetForm(request.POST)
+
+        if form.is_valid():
+            exp_set = form.cleaned_data['expansion_set']
+            missing_cards = get_card_list(user, expansion=exp_set)
+
+            context = {
+                'exp_set': exp_set,
+                'cards': missing_cards,
+            }
+
+            return render(request, 'main/missing_cards_per_set.html', context)
+
+        return render(request, 'main/missing_cards.html', context={'form': form})

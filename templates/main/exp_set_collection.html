@@ -4,7 +4,7 @@
 
 {% block content %}
     <h1>Collected cards from {{ exp_set.name }}:</h1>
-    {% include 'main/../partials/cards_partial.html' %}
+    {% include 'partials/card_loop_basic.html' %}
     <div class="text-center">
         <a href="{% url 'user_collection' %}" class="btn btn-primary mt-5">Go back</a>
     </div>
