@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
+
 from main.models.expansion_set import ExpansionSet
 from main.models.card import Card
 from main.models.collection_card import CollectionCard
+
 from main.forms import ChangeCardCountForm, SelectExpSetForm
+
 from main_core.decorators import group_required
-
-
-# Create your views here.
-from main_core.reusables import get_card_list
+from main_core.reusables import get_next_url, get_card_list
 
 
 def index(request):
@@ -73,7 +73,7 @@ def add_card(request, pk):
                 new_card = CollectionCard(card=card, user=user, copies=copies_to_add)
                 new_card.save()
 
-            return redirect('card_list', card.expansion_set.id)
+            return redirect(get_next_url(request.POST))
 
         context = {
             'form': form,
@@ -105,7 +105,7 @@ def increase_collected_card_count(request, pk):
             card.copies += copies_to_add
             card.save()
 
-            return redirect('user_collection')
+            return redirect(get_next_url(request.POST))
 
         context = {
             'form': form,
@@ -150,7 +150,7 @@ def remove_collected_card_copies(request, pk):
             else:
                 card.save()
 
-            return redirect('user_collection')
+            return redirect(get_next_url(request.POST))
 
         context = {
             'form': form,
@@ -172,7 +172,7 @@ def delete_collection_card(request, pk):
         return render(request, 'main/delete_user_card.html', context)
     else:
         card.delete()
-        return redirect('user_collection')
+        return redirect(get_next_url(request.POST))
 
 
 @group_required(groups=['Regular User'])

@@ -8,9 +8,9 @@
         <div class="items-container">
             <div class="item">
                 <form method="POST" action="{% url 'login_user' %}">
-                    <input type="hidden" name="return_url" value="{{ request.GET.next }}"/>
                     {% csrf_token %}
                     {{ login_form }}
+                    <input type="hidden" name="next" value="{{ request.GET.next }}">
                     <div class="text-center">
                         <button class="btn btn-primary mt-3">Login</button>
                     </div>

@@ -1,6 +1,11 @@
 from main.models.card import Card
 
 
+def get_next_url(params):
+    next_url = params.get('next', '/')
+    return next_url if next_url else 'index'
+
+
 def get_card_list(user, expansion=None):
     if not expansion:
         user_card_ids = user.collectioncard_set.all().values_list('card_id', flat=True)

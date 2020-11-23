@@ -8,9 +8,9 @@
             <div class="item">
                 <img src="{{ card.image.url }}" alt="Image of {{ card.name }}.">
                 <form method="POST" action="{% url 'add_card' card.id %}">
-                    <input type="hidden" name="next" value="{{ request.path }}"/>
                     {% csrf_token %}
                     {{ form }}
+                    <input type="hidden" name="next" value="{{ request.GET.next }}">
                     <div class="text-center">
                         <button class="btn btn-primary mt-3">Add card</button>
                     </div>

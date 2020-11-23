@@ -10,6 +10,7 @@
                 <form method="POST" action="{% url 'add_copies' card.id %}">
                     {% csrf_token %}
                     {{ form }}
+                    <input type="hidden" name="next" value="{{ request.GET.next }}">
                     <div class="text-center">
                         <button class="btn btn-primary mt-3">Add</button>
                     </div>

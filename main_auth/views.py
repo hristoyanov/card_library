@@ -4,11 +4,7 @@ from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect
 
 from main_auth.forms import RegisterForm, LoginForm
-
-
-def get_redirect_url(params):
-    redirect_url = params.get('return_url')
-    return redirect_url if redirect_url else 'index'
+from main_core.reusables import get_next_url
 
 
 def register_user(request):
@@ -45,7 +41,6 @@ def login_user(request):
         return render(request, 'auth/login.html', context)
     else:
         login_form = LoginForm(request.POST)
-        return_url = get_redirect_url(request.POST)
 
         if login_form.is_valid():
             username = login_form.cleaned_data['username']
@@ -54,7 +49,7 @@ def login_user(request):
 
             if user:
                 login(request, user)
-                return redirect(return_url)
+                return redirect(get_next_url(request.POST))
 
         context = {
             'login_form': login_form,
