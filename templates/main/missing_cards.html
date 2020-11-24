@@ -16,6 +16,10 @@
             </div>
         </div>
     </div>
-    <h1>Missing cards:</h1>
+    {% if not cards %}
+        <h1>Congratulations, you have collected every card!</h1>
+    {% else %}
+        <h1>Missing cards:</h1>
+    {% endif %}
     {% include 'partials/card_loop_detailed.html' %}
 {% endblock %}

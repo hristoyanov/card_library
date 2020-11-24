@@ -4,6 +4,10 @@
 
 {% block content %}
     {% include 'partials/exp_set_select.html' %}
-    <h1>All collected cards:</h1>
+    {% if complete %}
+        <h1>Congratulations, you have collected every card!</h1>
+    {% else %}
+        <h1>All cards:</h1>
+    {% endif %}
     {% include 'partials/card_loop_basic.html' %}
 {% endblock %}
