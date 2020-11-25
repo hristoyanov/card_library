@@ -7,7 +7,7 @@ from main.models.collection_card import CollectionCard
 from main.forms import ChangeCardCountForm, SelectExpSetForm
 
 from main_core.decorators import group_required
-from main_core.reusables import get_next_url, get_card_list
+from main_core.reusables import get_next_url, get_card_list, is_collection_complete
 
 
 def index(request):
@@ -183,7 +183,7 @@ def user_collection(request):
         context = {
             'form': SelectExpSetForm(),
             'cards': user.collectioncard_set.order_by('card__expansion_set__name', 'card__hero_class', 'card__name'),
-            'complete': Card.objects.all().count() == user.collectioncard_set.count()
+            'complete': is_collection_complete(user)
         }
 
         return render(request, 'main/user_collection.html', context)
@@ -197,7 +197,7 @@ def user_collection(request):
             context = {
                 'exp_set': exp_set,
                 'cards': cards,
-                'complete': Card.objects.filter(expansion_set=exp_set).count() == cards.count()
+                'complete': is_collection_complete(user, expansion=exp_set)
             }
 
             return render(request, 'main/exp_set_collection.html', context)
