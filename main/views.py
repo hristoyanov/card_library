@@ -7,7 +7,7 @@ from main.models.collection_card import CollectionCard
 from main.forms import ChangeCardCountForm, SelectExpSetForm
 
 from main_core.decorators import group_required
-from main_core.reusables import get_next_url, get_card_list, is_collection_complete
+from main_core.reusables import get_next_url, get_card_list, is_collection_complete, get_exp_set_id
 
 
 def index(request):
@@ -173,58 +173,54 @@ def delete_collection_card(request, pk):
 @group_required(groups=['Regular User'])
 def user_collection(request):
     user = request.user
+    result = get_exp_set_id(request.GET)
 
-    if request.method == 'GET':
+    if not result:
         context = {
             'form': SelectExpSetForm(),
+            'exp_set': '',
             'cards': user.collectioncard_set.order_by('card__expansion_set__name', 'card__hero_class', 'card__name'),
             'complete': is_collection_complete(user)
         }
 
         return render(request, 'main/user_collection.html', context)
     else:
-        form = SelectExpSetForm(request.POST)
+        exp_set = ExpansionSet.objects.get(pk=result)
+        cards = user.collectioncard_set.filter(card__expansion_set=exp_set)
 
-        if form.is_valid():
-            exp_set = form.cleaned_data['expansion_set']
-            cards = user.collectioncard_set.filter(card__expansion_set=exp_set)
+        context = {
+            'form': SelectExpSetForm(),
+            'exp_set': exp_set,
+            'cards': cards,
+            'complete': is_collection_complete(user, expansion=exp_set)
+        }
 
-            context = {
-                'exp_set': exp_set,
-                'cards': cards,
-                'complete': is_collection_complete(user, expansion=exp_set)
-            }
-
-            return render(request, 'main/exp_set_collection.html', context)
-
-        return render(request, 'main/user_collection.html', context={'form': form})
+        return render(request, 'main/user_collection.html', context)
 
 
 @group_required(groups=['Regular User'])
 def missing_cards_list(request):
     user = request.user
+    result = get_exp_set_id(request.GET)
 
-    if request.method == 'GET':
+    if not result:
         missing_cards = get_card_list(user)
 
         context = {
             'form': SelectExpSetForm(),
+            'exp_set': '',
             'cards': missing_cards,
         }
 
         return render(request, 'main/missing_cards.html', context)
     else:
-        form = SelectExpSetForm(request.POST)
+        exp_set = ExpansionSet.objects.get(pk=result)
+        missing_cards = get_card_list(user, expansion=exp_set)
 
-        if form.is_valid():
-            exp_set = form.cleaned_data['expansion_set']
-            missing_cards = get_card_list(user, expansion=exp_set)
+        context = {
+            'form': SelectExpSetForm(),
+            'exp_set': exp_set,
+            'cards': missing_cards,
+        }
 
-            context = {
-                'exp_set': exp_set,
-                'cards': missing_cards,
-            }
-
-            return render(request, 'main/missing_cards_per_set.html', context)
-
-        return render(request, 'main/missing_cards.html', context={'form': form})
+        return render(request, 'main/missing_cards.html', context)

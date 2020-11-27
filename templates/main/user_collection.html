@@ -4,10 +4,18 @@
 
 {% block content %}
     {% include 'partials/exp_set_select.html' %}
-    {% if complete %}
-        <h1>Congratulations, you have collected every card!</h1>
+    {% if not exp_set %}
+        {% if complete %}
+            <h1>Congratulations, you have collected every card!</h1>
+        {% else %}
+            <h1>All collected cards:</h1>
+        {% endif %}
     {% else %}
-        <h1>All cards:</h1>
+        {% if complete %}
+            <h1>You have completed the set {{ exp_set.name }}!</h1>
+        {% else %}
+            <h1>Collected cards from {{ exp_set.name }}:</h1>
+        {% endif %}
     {% endif %}
     {% include 'partials/card_loop_basic.html' %}
 {% endblock %}

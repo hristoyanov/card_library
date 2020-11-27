@@ -6,6 +6,14 @@ def get_next_url(params):
     return next_url if next_url else 'index'
 
 
+def get_exp_set_id(params):
+    exp_set_id = params['expansion_set'] if 'expansion_set' in params else None
+
+    if exp_set_id:
+        return int(exp_set_id)
+    return None
+
+
 def get_card_list(user, expansion=None):
     if not expansion:
         user_card_ids = user.collectioncard_set \

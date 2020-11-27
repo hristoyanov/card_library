@@ -7,4 +7,4 @@ class ChangeCardCountForm(forms.Form):
 
 
 class SelectExpSetForm(forms.Form):
-    expansion_set = forms.ModelChoiceField(ExpansionSet.objects.all(), label='Select Expansion Set')
+    expansion_set = forms.ModelChoiceField(ExpansionSet.objects.all(), required=False, label='Select Expansion Set')

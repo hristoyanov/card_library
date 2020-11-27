@@ -1,8 +1,7 @@
 <div class="container">
     <div class="items-container">
         <div class="item">
-            <form method="POST" action="{% url 'collected_set_cards' %}">
-                {% csrf_token %}
+            <form method="get" action="{% url 'user_collection' %}">
                 {{ form }}
                 <div class="text-center">
                     <button class="btn btn-primary btn-sm mt-3">Submit</button>

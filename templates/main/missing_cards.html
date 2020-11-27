@@ -6,8 +6,7 @@
     <div class="container">
         <div class="items-container">
             <div class="item">
-                <form method="POST" action="{% url 'missing_set_cards' %}">
-                    {% csrf_token %}
+                <form method="get" action="{% url 'missing' %}">
                     {{ form }}
                     <div class="text-center">
                         <button class="btn btn-primary btn-sm mt-3">Submit</button>
@@ -17,9 +16,17 @@
         </div>
     </div>
     {% if not cards %}
-        <h1>Congratulations, you have collected every card!</h1>
+        {% if exp_set %}
+            <h1>You have collected every card from {{ exp_set.name }}!</h1>
+        {% else %}
+            <h1>Congratulations, your collection is complete!</h1>
+        {% endif %}
     {% else %}
-        <h1>Missing cards:</h1>
+        {% if exp_set %}
+            <h1>Missing cards from {{ exp_set.name }}:</h1>
+        {% else %}
+            <h1>All missing cards:</h1>
+        {% endif %}
     {% endif %}
     {% include 'partials/card_loop_detailed.html' %}
 {% endblock %}
