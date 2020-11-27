@@ -2,19 +2,22 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect
+from django.views.generic import TemplateView
 
 from main_auth.forms import RegisterForm, LoginForm
 from main_core.reusables import get_next_url
 
 
-def register_user(request):
-    if request.method == 'GET':
-        context = {
-            'register_form': RegisterForm(),
-        }
+class RegisterView(TemplateView):
+    template_name = 'auth/register.html'
 
-        return render(request, 'auth/register.html', context)
-    else:
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['register_form'] = RegisterForm()
+
+        return context
+
+    def post(self, request):
         register_form = RegisterForm(request.POST)
 
         if register_form.is_valid():
@@ -25,11 +28,7 @@ def register_user(request):
             login(request, user)
             return redirect('index')
 
-        context = {
-            'register_form': register_form,
-        }
-
-        return render(request, 'auth/register.html', context)
+        return render(request, 'auth/register.html', context={'register_form': register_form})
 
 
 def login_user(request):

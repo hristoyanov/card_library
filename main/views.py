@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import ListView, DetailView
 from main.models.expansion_set import ExpansionSet
 from main.models.card import Card
 from main.models.collection_card import CollectionCard
@@ -16,32 +16,27 @@ def index(request):
     return render(request, 'main/index.html', context={'sets': sets})
 
 
-def expansion_set_list(request):
-    context = {
-        'sets': ExpansionSet.objects.order_by('-release_date'),
-    }
-
-    return render(request, 'main/set_list.html', context)
-
-
-def expansion_card_list(request, pk):
-    expansion = ExpansionSet.objects.get(pk=pk)
-    cards = expansion.card_set.order_by('hero_class', 'name')
-
-    context = {
-        'expansion': expansion,
-        'cards': cards,
-    }
-
-    return render(request, 'main/card_list.html', context)
+class ExpansionSetListView(ListView):
+    template_name = 'main/set_list.html'
+    model = ExpansionSet
+    context_object_name = 'sets'
+    ordering = ['-release_date']
 
 
-def card_info(request, pk):
-    context = {
-        'card': Card.objects.get(pk=pk),
-    }
+class ExpansionSetCardListView(ListView):
+    template_name = 'main/card_list.html'
+    model = Card
+    context_object_name = 'cards'
 
-    return render(request, 'main/card_info.html', context)
+    def get_queryset(self):
+        exp_set = get_object_or_404(ExpansionSet, pk=self.kwargs.get('pk'))
+        cards = exp_set.card_set.order_by('hero_class', 'name')
+
+        return cards
+
+
+class CardDetailView(DetailView):
+    model = Card
 
 
 @group_required(groups=['Regular User'])

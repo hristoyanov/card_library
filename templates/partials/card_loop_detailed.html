@@ -6,7 +6,7 @@
                     <img class="card-img-top" src="{{ card.image.url }}" alt="Card image cap">
                     <div class="card-body">
                         <div class="text-center">
-                            <a href="{% url 'card_info' card.id %}" class="btn btn-primary btn-sm">Card details</a>
+                            <a href="{% url 'card_detail' card.id %}" class="btn btn-primary btn-sm">Card details</a>
                             {% if user.is_authenticated %}
                                 <a href="{% url 'add_card' card.id %}?next={{ request.path|urlencode }}"
                                    class="btn btn-primary btn-sm">Add card</a>

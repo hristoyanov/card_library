@@ -1,0 +1,19 @@
+<div class="container">
+    <div class="row">
+        {% for set in sets %}
+            <div class="col-md-4 col-sm-6">
+                <div class="card m-3">
+                    <img class="card-img-top" src="{{ set.image.url }}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ set.name }}</h5>
+                        <p class="card-text">Cards: {{ set.card_count }}</p>
+                        {% if set.release_date %}
+                            <p class="card-text">Release date: {{ set.release_date }}</p>
+                        {% endif %}
+                        <a href="{% url 'card_list' set.id %}" class="btn btn-primary btn-sm">View cards</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
