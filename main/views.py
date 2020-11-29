@@ -180,7 +180,8 @@ def user_collection(request):
             'form': SelectExpSetForm(),
             'exp_set': '',
             'cards': user.collectioncard_set.order_by('card__expansion_set__name', 'card__hero_class', 'card__name'),
-            'complete': is_collection_complete(user)
+            'complete': is_collection_complete(user),
+            'total_card_count': Card.objects.all().count(),
         }
 
         return render(request, 'main/user_collection.html', context)
@@ -192,7 +193,8 @@ def user_collection(request):
             'form': SelectExpSetForm(),
             'exp_set': exp_set,
             'cards': cards,
-            'complete': is_collection_complete(user, expansion=exp_set)
+            'complete': is_collection_complete(user, expansion=exp_set),
+            'exp_set_card_count': Card.objects.filter(expansion_set=exp_set).count(),
         }
 
         return render(request, 'main/user_collection.html', context)
