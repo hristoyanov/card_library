@@ -4,4 +4,9 @@
 
 {% block content %}
     {% include 'partials/card_loop_detailed.html' %}
+    <div class="d-flex">
+        <div class="mx-auto">
+            {% include 'common/pagination.html' %}
+        </div>
+    </div>
 {% endblock %}

@@ -18,4 +18,11 @@
         {% endif %}
     {% endif %}
     {% include 'partials/card_loop_basic.html' %}
+    {% if cards %}
+        <div class="d-flex mt-3">
+            <div class="mx-auto">
+                {% include 'common/pagination.html' %}
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

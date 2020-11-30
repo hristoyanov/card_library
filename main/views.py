@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from main.models.expansion_set import ExpansionSet
@@ -21,12 +22,14 @@ class ExpansionSetListView(ListView):
     model = ExpansionSet
     context_object_name = 'sets'
     ordering = ['-release_date']
+    paginate_by = 2
 
 
 class ExpansionSetCardListView(ListView):
     template_name = 'main/card_list.html'
     model = Card
     context_object_name = 'cards'
+    paginate_by = 8
 
     def get_queryset(self):
         exp_set = get_object_or_404(ExpansionSet, pk=self.kwargs.get('pk'))
@@ -176,18 +179,30 @@ def user_collection(request):
     result = get_exp_set_id(request.GET)
 
     if not result:
+        cards = user.collectioncard_set.order_by('card__expansion_set__name', 'card__hero_class', 'card__name')
+
+        paginator = Paginator(cards, 8)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         context = {
             'form': SelectExpSetForm(),
             'exp_set': '',
-            'cards': user.collectioncard_set.order_by('card__expansion_set__name', 'card__hero_class', 'card__name'),
+            'cards': cards,
             'complete': is_collection_complete(user),
             'total_card_count': Card.objects.all().count(),
+            'is_paginated': True,
+            'page_obj': page_obj,
         }
 
         return render(request, 'main/user_collection.html', context)
     else:
         exp_set = ExpansionSet.objects.get(pk=result)
-        cards = user.collectioncard_set.filter(card__expansion_set=exp_set)
+        cards = user.collectioncard_set.filter(card__expansion_set=exp_set).order_by('card__hero_class', 'card__name')
+
+        paginator = Paginator(cards, 8)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
 
         context = {
             'form': SelectExpSetForm(),
@@ -195,6 +210,8 @@ def user_collection(request):
             'cards': cards,
             'complete': is_collection_complete(user, expansion=exp_set),
             'exp_set_card_count': Card.objects.filter(expansion_set=exp_set).count(),
+            'is_paginated': True,
+            'page_obj': page_obj,
         }
 
         return render(request, 'main/user_collection.html', context)
@@ -208,10 +225,16 @@ def missing_cards_list(request):
     if not result:
         missing_cards = get_card_list(user)
 
+        paginator = Paginator(missing_cards, 8)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         context = {
             'form': SelectExpSetForm(),
             'exp_set': '',
             'cards': missing_cards,
+            'is_paginated': True,
+            'page_obj': page_obj,
         }
 
         return render(request, 'main/missing_cards.html', context)
@@ -219,10 +242,16 @@ def missing_cards_list(request):
         exp_set = ExpansionSet.objects.get(pk=result)
         missing_cards = get_card_list(user, expansion=exp_set)
 
+        paginator = Paginator(missing_cards, 8)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         context = {
             'form': SelectExpSetForm(),
             'exp_set': exp_set,
             'cards': missing_cards,
+            'is_paginated': True,
+            'page_obj': page_obj,
         }
 
         return render(request, 'main/missing_cards.html', context)
