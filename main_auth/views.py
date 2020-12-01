@@ -1,6 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
+from django.contrib import messages
+from django.contrib.messages import get_messages
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
@@ -50,11 +52,17 @@ def login_user(request):
                 login(request, user)
                 return redirect(get_next_url(request.POST))
 
-        context = {
-            'login_form': login_form,
-        }
+            messages.error(request, 'Invalid login credentials!')
+            errors = get_messages(request)
 
-        return render(request, 'auth/login.html', context)
+            context = {
+                'login_form': login_form,
+                'messages': errors,
+            }
+
+            return render(request, 'auth/login.html', context)
+
+        return render(request, 'auth/login.html', context={'login_form': login_form})
 
 
 @login_required

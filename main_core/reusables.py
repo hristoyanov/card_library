@@ -11,7 +11,7 @@ def get_exp_set_id(params):
 
     if exp_set_id:
         return int(exp_set_id)
-    return None
+    return exp_set_id
 
 
 def get_card_list(user, expansion=None):

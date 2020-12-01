@@ -10,6 +10,11 @@
                 <form method="POST" action="{% url 'login_user' %}">
                     {% csrf_token %}
                     {{ login_form }}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p class="text-center text font-weight-bold">{{ message }}</p>
+                        {% endfor %}
+                    {% endif %}
                     <input type="hidden" name="next" value="{{ request.GET.next }}">
                     <div class="text-center">
                         <button class="btn btn-primary mt-3">Login</button>

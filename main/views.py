@@ -8,7 +8,7 @@ from main.models.collection_card import CollectionCard
 from main.forms import ChangeCardCountForm, SelectExpSetForm
 
 from main_core.decorators import group_required
-from main_core.reusables import get_next_url, get_card_list, is_collection_complete, get_exp_set_id
+from main_core.reusables import get_next_url, get_exp_set_id, get_card_list, is_collection_complete
 
 
 def index(request):
@@ -205,7 +205,7 @@ def user_collection(request):
         page_obj = paginator.get_page(page_number)
 
         context = {
-            'form': SelectExpSetForm(),
+            'form': SelectExpSetForm(initial={'expansion_set': result}),
             'exp_set': exp_set,
             'cards': cards,
             'complete': is_collection_complete(user, expansion=exp_set),
@@ -247,7 +247,7 @@ def missing_cards_list(request):
         page_obj = paginator.get_page(page_number)
 
         context = {
-            'form': SelectExpSetForm(),
+            'form': SelectExpSetForm(initial={'expansion_set': result}),
             'exp_set': exp_set,
             'cards': missing_cards,
             'is_paginated': True,

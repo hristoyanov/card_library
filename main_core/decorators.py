@@ -1,7 +1,10 @@
 from django.shortcuts import render
 
 
-def group_required(groups=[]):
+def group_required(groups=None):
+    if groups is None:
+        groups = []
+
     groups_set = set(groups)
 
     def decorator(view_func):
@@ -14,9 +17,6 @@ def group_required(groups=[]):
 
             if user_groups.intersection(groups_set):
                 return view_func(request, *args, **kwargs)
-
             return render(request, 'common/unauthorized.html')
-
         return wrapper
-
     return decorator
