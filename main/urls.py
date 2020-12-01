@@ -1,6 +1,7 @@
 from django.urls import path
-from main.views import index, ExpansionSetListView, ExpansionSetCardListView, CardDetailView, user_collection, \
-    missing_cards_list, add_card, increase_collected_card_count, remove_collected_card_copies, delete_collection_card
+from main.views.public_views import index, ExpansionSetListView, ExpansionSetCardListView, CardDetailView
+from main.views.user_views import add_card, user_collection, missing_cards_list, increase_collected_card_count, \
+    remove_collected_card_copies, delete_collection_card
 
 urlpatterns = [
     path('', index, name='index'),

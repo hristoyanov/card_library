@@ -1,49 +1,30 @@
 from django.core.paginator import Paginator
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, DetailView
-from main.models.expansion_set import ExpansionSet
-from main.models.card import Card
-from main.models.collection_card import CollectionCard
+from django.shortcuts import render, redirect
 
 from main.forms import ChangeCardCountForm, SelectExpSetForm
-
+from main.models.card import Card
+from main.models.collection_card import CollectionCard
+from main.models.expansion_set import ExpansionSet
 from main_core.decorators import group_required
-from main_core.reusables import get_next_url, get_exp_set_id, get_card_list, is_collection_complete
-
-
-def index(request):
-    sets = ExpansionSet.objects.order_by('-release_date')[:3]
-
-    return render(request, 'main/index.html', context={'sets': sets})
-
-
-class ExpansionSetListView(ListView):
-    template_name = 'main/set_list.html'
-    model = ExpansionSet
-    context_object_name = 'sets'
-    ordering = ['-release_date']
-    paginate_by = 2
-
-
-class ExpansionSetCardListView(ListView):
-    template_name = 'main/card_list.html'
-    model = Card
-    context_object_name = 'cards'
-    paginate_by = 8
-
-    def get_queryset(self):
-        exp_set = get_object_or_404(ExpansionSet, pk=self.kwargs.get('pk'))
-        cards = exp_set.card_set.order_by('hero_class', 'name')
-
-        return cards
-
-
-class CardDetailView(DetailView):
-    model = Card
+from main_core.reusables import get_next_url, get_exp_set_id, is_collection_complete, get_card_list
 
 
 @group_required(groups=['Regular User'])
 def add_card(request, pk):
+    """Adds a card to the currently logged-in user's collection.
+
+    Returns:
+        If the request method is GET:
+            renders a form for selecting the amount of copies to be added.
+
+        If the request method is POST:
+            If the user already has the card in their collection, increases the copies owned with the amount
+            selected in the form and saves the card.
+
+            If the user does not have the card in their collection, creates a new CollectionCard object and sets its
+            'copies' attribute value to the one selected in the form.
+    """
+
     card = Card.objects.get(pk=pk)
 
     if request.method == 'GET':
@@ -83,6 +64,16 @@ def add_card(request, pk):
 
 @group_required(groups=['Regular User'])
 def increase_collected_card_count(request, pk):
+    """Adds extra copies of an already collected card.
+
+    Returns:
+        If the request method is GET:
+            renders a form for selecting the amount of copies to be added.
+
+        If the request method is POST:
+            Increases the value of the card's 'copies' attribute with the amount selected in the form.
+    """
+
     card = request.user.collectioncard_set.get(pk=pk)
 
     if request.method == 'GET':
@@ -115,6 +106,22 @@ def increase_collected_card_count(request, pk):
 
 @group_required(groups=['Regular User'])
 def remove_collected_card_copies(request, pk):
+    """Removes number of copies of an already collected card.
+
+    Returns:
+        If the request method is GET:
+            renders a form for selecting the amount of copies to be removed.
+
+        If the request method is POST:
+            Checks if the amount of copies selected in the form is greater than the owned copies of the card and if it
+            is, renders the form again with an error message.
+
+            If the form is valid, reduces copies owned with the amount selected and saves the card.
+
+            If the values are equal (for example: copies owned are 2 and selected amount is 2), deletes the card from
+            the user's collection.
+    """
+
     card = request.user.collectioncard_set.get(pk=pk)
 
     if request.method == 'GET':
@@ -160,6 +167,8 @@ def remove_collected_card_copies(request, pk):
 
 @group_required(groups=['Regular User'])
 def delete_collection_card(request, pk):
+    """Deletes a card from the user's collection."""
+
     card = request.user.collectioncard_set.get(pk=pk)
 
     if request.method == 'GET':
@@ -175,6 +184,11 @@ def delete_collection_card(request, pk):
 
 @group_required(groups=['Regular User'])
 def user_collection(request):
+    """Renders a view either of a user's entire collection or filtered by expansion set.
+
+    For a card to be considered 'collected', the user must have at least 2 copies of it.
+    """
+
     user = request.user
     result = get_exp_set_id(request.GET)
 
@@ -219,6 +233,11 @@ def user_collection(request):
 
 @group_required(groups=['Regular User'])
 def missing_cards_list(request):
+    """Renders a view of all the user's missing cards, or only ones from a specific expansion set.
+
+    Includes cards that the user doesn't have at all as well as ones with less than 2 copies owned.
+    """
+
     user = request.user
     result = get_exp_set_id(request.GET)
 
