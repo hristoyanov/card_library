@@ -1,3 +1,5 @@
+from django.core.paginator import Paginator
+
 from main.models.card import Card
 
 
@@ -16,6 +18,16 @@ def get_exp_set_id(params):
     if exp_set_id:
         return int(exp_set_id)
     return exp_set_id
+
+
+def custom_paginator(request, cards, cards_per_page=8):
+    """Paginates a view with a default of 8 objects per page."""
+
+    paginator = Paginator(cards, cards_per_page)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return page_obj
 
 
 def get_card_list(user, expansion=None):

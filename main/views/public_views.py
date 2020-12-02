@@ -1,16 +1,20 @@
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.shortcuts import get_object_or_404
+from django.views.generic import ListView, DetailView, TemplateView
 
 from main.models.card import Card
 from main.models.expansion_set import ExpansionSet
 
 
-def index(request):
+class IndexView(TemplateView):
     """Renders the landing page with the 3 most recently released expansion sets."""
 
-    sets = ExpansionSet.objects.order_by('-release_date')[:3]
+    template_name = 'main/index.html'
 
-    return render(request, 'main/index.html', context={'sets': sets})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sets'] = ExpansionSet.objects.order_by('-release_date')[:3]
+
+        return context
 
 
 class ExpansionSetListView(ListView):
