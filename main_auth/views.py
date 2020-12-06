@@ -6,7 +6,9 @@ from django.contrib.messages import get_messages
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 
+from main.models.class_portrait import ClassPortrait
 from main_auth.forms import RegisterForm, LoginForm
+from main_auth.models import UserProfile
 from main_core.reusables import get_next_url
 
 
@@ -26,6 +28,8 @@ class RegisterView(TemplateView):
             user = register_form.save()
             group = Group.objects.get(name='Regular User')
             user.groups.add(group)
+            profile = UserProfile(user=user, profile_picture=ClassPortrait.objects.get(name='Default'))
+            profile.save()
 
             login(request, user)
             return redirect('index')
@@ -70,3 +74,25 @@ def logout_user(request):
     logout(request)
 
     return redirect('index')
+
+
+# @login_required
+# def user_profile(request):
+#     user = request.user
+#
+#     if request.method == 'GET':
+#         context = {
+#             'profile_user': user,
+#             'profile': user.userprofile,
+#             'profile_form': UserProfileForm(),
+#         }
+#
+#         return render(request, 'auth/user_profile.html', context)
+#     else:
+#         profile_form = UserProfileForm(request.POST, instance=user.userprofile)
+#
+#         if profile_form.is_valid():
+#             profile_form.save()
+#             return redirect('user_profile')
+#
+#         return render(request, 'auth/user_profile.html', context={'profile_form': profile_form})

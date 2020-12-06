@@ -1,0 +1,23 @@
+{% extends 'common/base.html' %}
+
+{% block title %}Change Picture{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            {% for class in classes %}
+                <div class="col-md-3">
+                    <img class="rounded-circle mt-3" src="{{ class.image.url }}" alt="Hero Class Image"
+                         width="200"
+                         height="200">
+                    <form action="{% url 'change_picture' class.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="text-center">
+                            <button class="btn btn-primary btn-sm mr-5 mt-3">Select</button>
+                        </div>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

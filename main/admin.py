@@ -1,4 +1,6 @@
 from django.contrib import admin
+
+from main.models.class_portrait import ClassPortrait
 from main.models.expansion_set import ExpansionSet
 from main.models.card import Card
 from main.models.collection_card import CollectionCard
@@ -7,3 +9,4 @@ from main.models.collection_card import CollectionCard
 admin.site.register(ExpansionSet)
 admin.site.register(Card)
 admin.site.register(CollectionCard)
+admin.site.register(ClassPortrait)

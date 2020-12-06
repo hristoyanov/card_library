@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'main',
     'main_auth',
+    'profiles',
 ]
 
 MIDDLEWARE = [

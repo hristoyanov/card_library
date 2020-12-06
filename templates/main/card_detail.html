@@ -9,7 +9,7 @@
             <div class="card-body">
                 <h5 class="card-title">{{ card.name }}</h5>
                 <p class="card-text text-center">Type: {{ card.card_type|title }}</p>
-                <p class="card-text">Class: {{ card.hero_class|title }}</p>
+                <p class="card-text">Class: {{ card.get_hero_class_display }}</p>
                 <p class="card-text">Mana cost: {{ card.mana_cost }}</p>
                 <p class="card-text">Rarity: {{ card.rarity|title }}</p>
             </div>
