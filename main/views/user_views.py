@@ -213,7 +213,7 @@ def user_collection(request):
             'exp_set': exp_set,
             'cards': cards,
             'complete': is_collection_complete(user, expansion=exp_set),
-            'exp_set_card_count': Card.objects.filter(expansion_set=exp_set).count(),
+            'exp_set_card_count': exp_set.card_count,
             'is_paginated': True,
             'page_obj': custom_paginator(request, cards),
         }

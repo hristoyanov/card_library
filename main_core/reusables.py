@@ -69,7 +69,7 @@ def get_card_list(user, expansion=None):
 
         missing_cards = Card.objects \
             .exclude(id__in=all_user_card_ids) \
-            .order_by('expansion_set__name', 'hero_class', 'name')
+            .order_by('hero_class', 'name')
 
         return missing_cards
 

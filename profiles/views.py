@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-# Create your views here.
+from main.models.card import Card
 from main.models.class_portrait import ClassPortrait
 from profiles.forms import FavouriteClassForm
 
@@ -9,7 +9,7 @@ from profiles.forms import FavouriteClassForm
 @login_required
 def user_profile(request):
     user = request.user
-    cards = user.collectioncard_set.distinct('card__expansion_set')
+    unique_user_sets = user.collectioncard_set.distinct('card__expansion_set')
 
     if request.method == 'GET':
         context = {
@@ -17,7 +17,9 @@ def user_profile(request):
             'profile': user.userprofile,
             'form': FavouriteClassForm(),
             'favourite_class': user.userprofile.favourite_class,
-            'cards': cards,
+            'user_sets': unique_user_sets,
+            'total_user_cards': user.collectioncard_set.count(),
+            'total_cards': Card.objects.count(),
         }
 
         return render(request, 'auth/user_profile.html', context)

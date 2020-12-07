@@ -35,31 +35,35 @@
             </div>
         </div>
     </div>
-    <h2>My sets:</h2>
-    <div class="container">
-        <div class="row mt-5">
-            {% for card in cards %}
-                <div class="col-md-4 col-sm-4">
-                    <div class="card m-3">
-                        <img class="card-img-top" src="{{ card.card.expansion_set.image.url }}" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ card.card.expansion_set.name }}</h5>
-                            <form action="{% url 'user_collection' %}" method="get">
-                                <input type="hidden" name="expansion_set" value="{{ card.card.expansion_set.id }}">
-                                <div class="text-center">
-                                    <button class="btn btn-primary btn-sm">View collected cards</button>
-                                </div>
-                            </form>
-                            <form action="{% url 'missing' %}" method="get">
-                                <input type="hidden" name="expansion_set" value="{{ card.card.expansion_set.id }}">
-                                <div class="text-center">
-                                    <button class="btn btn-primary btn-sm mt-3">View missing cards</button>
-                                </div>
-                            </form>
+    <h2>Total cards collected: {{ total_user_cards }}/{{ total_cards }}</h2>
+    {% if user_sets %}
+        <h2>My sets:</h2>
+        <div class="container">
+            <div class="row mt-5">
+                {% for card in user_sets %}
+                    <div class="col-md-4 col-sm-4">
+                        <div class="card m-3">
+                            <img class="card-img-top" src="{{ card.card.expansion_set.image.url }}"
+                                 alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ card.card.expansion_set.name }}</h5>
+                                <form action="{% url 'user_collection' %}" method="get">
+                                    <input type="hidden" name="expansion_set" value="{{ card.card.expansion_set.id }}">
+                                    <div class="text-center">
+                                        <button class="btn btn-primary btn-sm">View collected cards</button>
+                                    </div>
+                                </form>
+                                <form action="{% url 'missing' %}" method="get">
+                                    <input type="hidden" name="expansion_set" value="{{ card.card.expansion_set.id }}">
+                                    <div class="text-center">
+                                        <button class="btn btn-primary btn-sm mt-3">View missing cards</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
-    </div>
+    {% endif %}
 {% endblock %}
