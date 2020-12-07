@@ -4,6 +4,9 @@
 
 {% block content %}
     {% include 'partials/card_loop_detailed.html' %}
+    <div class="text-center">
+        <a class="btn btn-primary btn-sm mt-2" href="{% url 'set_list' %}">Back to sets</a>
+    </div>
     <div class="d-flex">
         <div class="mx-auto">
             {% include 'common/pagination.html' %}

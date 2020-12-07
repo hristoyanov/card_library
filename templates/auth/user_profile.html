@@ -17,10 +17,12 @@
     <div class="text-center">
         {% if favourite_class %}
             <h2>Favourite class: {{ profile.get_favourite_class_display }}</h2>
-    {% endif %}
+            <div class="text-center mt-3">Change favourite class:</div>
+        {% else %}
+            <div class="text-center font-weight-bold mt-3">Set favourite class:</div>
+        {% endif %}
     </div>
     <div class="container">
-        <p class="text-center">Set favourite class:</p>
         <div class="items-container">
             <div class="item">
                 <form method="POST" action="{% url 'user_profile' %}">
@@ -31,6 +33,33 @@
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+    <h2>My sets:</h2>
+    <div class="container">
+        <div class="row mt-5">
+            {% for card in cards %}
+                <div class="col-md-4 col-sm-4">
+                    <div class="card m-3">
+                        <img class="card-img-top" src="{{ card.card.expansion_set.image.url }}" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ card.card.expansion_set.name }}</h5>
+                            <form action="{% url 'user_collection' %}" method="get">
+                                <input type="hidden" name="expansion_set" value="{{ card.card.expansion_set.id }}">
+                                <div class="text-center">
+                                    <button class="btn btn-primary btn-sm">View collected cards</button>
+                                </div>
+                            </form>
+                            <form action="{% url 'missing' %}" method="get">
+                                <input type="hidden" name="expansion_set" value="{{ card.card.expansion_set.id }}">
+                                <div class="text-center">
+                                    <button class="btn btn-primary btn-sm mt-3">View missing cards</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

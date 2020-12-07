@@ -9,13 +9,15 @@ from profiles.forms import FavouriteClassForm
 @login_required
 def user_profile(request):
     user = request.user
+    cards = user.collectioncard_set.distinct('card__expansion_set')
 
     if request.method == 'GET':
         context = {
             'profile_user': user,
             'profile': user.userprofile,
             'form': FavouriteClassForm(),
-            'favourite_class': user.userprofile.favourite_class
+            'favourite_class': user.userprofile.favourite_class,
+            'cards': cards,
         }
 
         return render(request, 'auth/user_profile.html', context)

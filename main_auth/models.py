@@ -3,6 +3,7 @@ from django.db import models
 
 # Create your models here.
 from main.models.class_portrait import ClassPortrait
+from main.models.expansion_set import ExpansionSet
 
 
 class UserProfile(models.Model):
