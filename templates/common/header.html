@@ -12,20 +12,25 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'set_list' %}">All sets</a>
             </li>
-            {% if user.is_authenticated %}
+            {% if user.is_authenticated and not user.is_superuser %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'user_collection' %}">My cards</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'missing' %}">Missing cards</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'user_profile' %}">Profile</a>
+                </li>
             {% endif %}
         </ul>
         <ul class="navbar-nav ml-auto">
-            {% if user.is_authenticated %}
+            {% if user.is_authenticated and not user.is_superuser %}
                 <li class="nav-item float-right">
                     <a class="nav-link" href="{% url 'user_profile' %}">Greetings, {{ user.username }}!</a>
                 </li>
+            {% endif %}
+            {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout_user' %}">Logout</a>
                 </li>
