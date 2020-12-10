@@ -1,7 +1,7 @@
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import Group
 from django.contrib import messages
+from django.contrib.auth.views import LogoutView
 from django.contrib.messages import get_messages
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
@@ -32,7 +32,7 @@ class RegisterView(TemplateView):
             profile.save()
 
             login(request, user)
-            return redirect('index')
+            return redirect('user_profile')
 
         return render(request, 'auth/register.html', context={'register_form': register_form})
 
@@ -69,30 +69,5 @@ def login_user(request):
         return render(request, 'auth/login.html', context={'login_form': login_form})
 
 
-@login_required
-def logout_user(request):
-    logout(request)
-
-    return redirect('index')
-
-
-# @login_required
-# def user_profile(request):
-#     user = request.user
-#
-#     if request.method == 'GET':
-#         context = {
-#             'profile_user': user,
-#             'profile': user.userprofile,
-#             'profile_form': UserProfileForm(),
-#         }
-#
-#         return render(request, 'auth/user_profile.html', context)
-#     else:
-#         profile_form = UserProfileForm(request.POST, instance=user.userprofile)
-#
-#         if profile_form.is_valid():
-#             profile_form.save()
-#             return redirect('user_profile')
-#
-#         return render(request, 'auth/user_profile.html', context={'profile_form': profile_form})
+class LogOutView(LogoutView):
+    next_page = 'index'
