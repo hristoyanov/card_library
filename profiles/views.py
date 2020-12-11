@@ -36,7 +36,7 @@ def user_profile(request):
 @login_required
 def change_profile_picture(request, pk=None):
     if request.method == 'GET':
-        classes = ClassPortrait.objects.order_by('-hero_class')
+        classes = ClassPortrait.objects.order_by('hero_class')
 
         return render(request, 'profiles/change_picture.html', context={'classes': classes})
     else:

@@ -6,15 +6,15 @@
     {% include 'partials/exp_set_select.html' %}
     {% if not exp_set %}
         {% if complete %}
-            <h1>Congratulations, you have collected all {{ total_card_count }} cards!</h1>
+            <h1>Congratulations, you have a play set of all {{ total_card_count }} cards!</h1>
         {% else %}
-            <h1>{{ cards.count }}/{{ total_card_count }} total cards collected:</h1>
+            <h1>{{ cards.count }}/{{ total_card_count }} unique cards collected:</h1>
         {% endif %}
     {% else %}
         {% if complete %}
-            <h1>You have collected all {{ exp_set_card_count }} cards from {{ exp_set.name }}!</h1>
+            <h1>You have collected a play set of all {{ exp_set_card_count }} cards from {{ exp_set.name }}!</h1>
         {% else %}
-            <h1>{{ cards.count }}/{{ exp_set_card_count }} cards collected from {{ exp_set.name }}:</h1>
+            <h1>{{ cards.count }}/{{ exp_set_card_count }} unique cards collected from {{ exp_set.name }}:</h1>
         {% endif %}
     {% endif %}
     {% include 'partials/card_loop_basic.html' %}
