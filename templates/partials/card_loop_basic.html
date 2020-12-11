@@ -10,9 +10,9 @@
                 </div>
                 <div class="text-center">
                     <a href="{% url 'add_copies' card.id %}?next={{ request.path|urlencode }}"
-                       class="btn btn-primary btn-sm">Add</a>
+                       class="btn btn-dark btn-sm">Add</a>
                     <a href="{% url 'remove_copies' card.id %}?next={{ request.path|urlencode }}"
-                       class="btn btn-primary btn-sm">Remove</a>
+                       class="btn btn-dark btn-sm">Remove</a>
                     <a href="{% url 'delete_user_card' card.id %}?next={{ request.path|urlencode }}"
                        class="btn btn-danger btn-sm">Delete</a>
                 </div>

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="navbar-brand">Collection Tracker</div>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -12,7 +12,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'set_list' %}">All sets</a>
             </li>
-            {% if user.is_authenticated and not user.is_superuser %}
+            {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'user_collection' %}">My cards</a>
                 </li>
@@ -25,12 +25,10 @@
             {% endif %}
         </ul>
         <ul class="navbar-nav ml-auto">
-            {% if user.is_authenticated and not user.is_superuser %}
+            {% if user.is_authenticated %}
                 <li class="nav-item float-right">
                     <a class="nav-link" href="{% url 'user_profile' %}">Greetings, {{ user.username }}!</a>
                 </li>
-            {% endif %}
-            {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout_user' %}">Logout</a>
                 </li>

@@ -6,8 +6,14 @@ from main.models.card import Card
 from main.models.collection_card import CollectionCard
 
 
+class CardInline(admin.StackedInline):
+    model = Card
+
+
 class ExpansionSetAdmin(admin.ModelAdmin):
     list_display = ('name', 'card_count', 'release_date')
+
+    inlines = (CardInline,)
 
 
 class CardAdmin(admin.ModelAdmin):

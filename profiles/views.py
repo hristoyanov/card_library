@@ -22,7 +22,7 @@ def user_profile(request):
             'total_cards': Card.objects.count(),
         }
 
-        return render(request, 'auth/user_profile.html', context)
+        return render(request, 'profiles/user_profile.html', context)
     else:
         form = FavouriteClassForm(request.POST, instance=user.userprofile)
 
@@ -36,7 +36,7 @@ def user_profile(request):
 @login_required
 def change_profile_picture(request, pk=None):
     if request.method == 'GET':
-        classes = ClassPortrait.objects.all()
+        classes = ClassPortrait.objects.order_by('-hero_class')
 
         return render(request, 'profiles/change_picture.html', context={'classes': classes})
     else:
