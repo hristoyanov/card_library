@@ -1,4 +1,5 @@
 {% extends 'common/base.html' %}
+{% load user_collected_cards %}
 
 {% block title %}Profile{% endblock %}
 
@@ -47,18 +48,19 @@
                                  alt="Card image cap">
                             <div class="card-body">
                                 <h5 class="card-title">{{ card.card.expansion_set.name }}</h5>
-                                <form action="{% url 'user_collection' %}" method="get">
-                                    <input type="hidden" name="expansion_set" value="{{ card.card.expansion_set.id }}">
-                                    <div class="text-center">
+                                <p class="card-text">{% user_collected_cards profile_user card %}</p>
+                                <div>
+                                    <form action="{% url 'user_collection' %}" method="get">
+                                        <input type="hidden" name="expansion_set"
+                                               value="{{ card.card.expansion_set.id }}">
                                         <button class="btn btn-dark btn-sm">View collected cards</button>
-                                    </div>
-                                </form>
-                                <form action="{% url 'missing' %}" method="get">
-                                    <input type="hidden" name="expansion_set" value="{{ card.card.expansion_set.id }}">
-                                    <div class="text-center">
-                                        <button class="btn btn-dark btn-sm mt-3">View missing cards</button>
-                                    </div>
-                                </form>
+                                    </form>
+                                    <form action="{% url 'missing' %}" method="get">
+                                        <input type="hidden" name="expansion_set"
+                                               value="{{ card.card.expansion_set.id }}">
+                                        <button class="btn btn-dark btn-sm mt-1">View missing cards</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
