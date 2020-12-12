@@ -5,7 +5,7 @@ from main.models.card import Card
 from main.models.collection_card import CollectionCard
 from main.models.expansion_set import ExpansionSet
 from main_core.decorators import group_required
-from main_core.reusables import get_next_url, get_exp_set_id, is_collection_complete, get_card_list, custom_paginator
+from main_core.reusables import get_next_url, get_exp_set_id, is_collection_complete, get_card_list
 
 
 @group_required(groups=['Regular User'])
@@ -192,7 +192,7 @@ def user_collection(request):
     result = get_exp_set_id(request.GET)
 
     if not result:
-        cards = user.collectioncard_set.order_by('card__expansion_set__name', 'card__hero_class', 'card__name')
+        cards = user.collectioncard_set.order_by('card__expansion_set__name', '-card__hero_class', 'card__mana_cost')
 
         context = {
             'form': SelectExpSetForm(),
@@ -200,14 +200,13 @@ def user_collection(request):
             'cards': cards,
             'complete': is_collection_complete(user),
             'total_card_count': Card.objects.all().count(),
-            'is_paginated': True,
-            'page_obj': custom_paginator(request, cards),
         }
 
         return render(request, 'main/user_collection.html', context)
     else:
         exp_set = ExpansionSet.objects.get(pk=result)
-        cards = user.collectioncard_set.filter(card__expansion_set=exp_set).order_by('card__hero_class', 'card__name')
+        cards = user.collectioncard_set.filter(card__expansion_set=exp_set).order_by('-card__hero_class',
+                                                                                     'card__mana_cost')
 
         context = {
             'form': SelectExpSetForm(initial={'expansion_set': result}),
@@ -215,8 +214,6 @@ def user_collection(request):
             'cards': cards,
             'complete': is_collection_complete(user, expansion=exp_set),
             'exp_set_card_count': exp_set.card_count,
-            'is_paginated': True,
-            'page_obj': custom_paginator(request, cards),
         }
 
         return render(request, 'main/user_collection.html', context)
@@ -239,8 +236,6 @@ def missing_cards_list(request):
             'form': SelectExpSetForm(),
             'exp_set': '',
             'cards': missing_cards,
-            'is_paginated': True,
-            'page_obj': custom_paginator(request, missing_cards),
         }
 
         return render(request, 'main/missing_cards.html', context)
@@ -252,8 +247,6 @@ def missing_cards_list(request):
             'form': SelectExpSetForm(initial={'expansion_set': result}),
             'exp_set': exp_set,
             'cards': missing_cards,
-            'is_paginated': True,
-            'page_obj': custom_paginator(request, missing_cards),
         }
 
         return render(request, 'main/missing_cards.html', context)

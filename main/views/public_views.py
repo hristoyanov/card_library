@@ -40,7 +40,7 @@ class ExpansionSetCardListView(ListView):
 
     def get_queryset(self):
         exp_set = get_object_or_404(ExpansionSet, pk=self.kwargs.get('pk'))
-        cards = exp_set.card_set.order_by('hero_class', 'name')
+        cards = exp_set.card_set.order_by('-hero_class', 'mana_cost')
 
         return cards
 

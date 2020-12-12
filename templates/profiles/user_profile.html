@@ -36,7 +36,7 @@
             </div>
         </div>
     </div>
-    <h2>Total cards collected: {{ total_user_cards }}/{{ total_cards }}</h2>
+    <h2>Total unique cards collected: {{ total_user_cards }}/{{ total_cards }}</h2>
     {% if user_sets %}
         <h2>My sets:</h2>
         <div class="container">
@@ -53,12 +53,7 @@
                                     <form action="{% url 'user_collection' %}" method="get">
                                         <input type="hidden" name="expansion_set"
                                                value="{{ card.card.expansion_set.id }}">
-                                        <button class="btn btn-dark btn-sm">View collected cards</button>
-                                    </form>
-                                    <form action="{% url 'missing' %}" method="get">
-                                        <input type="hidden" name="expansion_set"
-                                               value="{{ card.card.expansion_set.id }}">
-                                        <button class="btn btn-dark btn-sm mt-1">View missing cards</button>
+                                        <button class="btn btn-dark btn-sm">View my cards</button>
                                     </form>
                                 </div>
                             </div>

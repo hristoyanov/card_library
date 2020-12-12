@@ -14,7 +14,6 @@ class Card(models.Model):
         ('shaman', 'Shaman'),
         ('warlock', 'Warlock'),
         ('warrior', 'Warrior'),
-        ('neutral', 'Neutral'),
     ]
 
     rarities = [
@@ -34,7 +33,7 @@ class Card(models.Model):
 
     name = models.CharField(max_length=30, blank=False)
     card_type = models.CharField(max_length=9, blank=False, choices=card_types)
-    hero_class = models.CharField(max_length=12, blank=False, choices=hero_classes)
+    hero_class = models.CharField(max_length=12, blank=True, choices=hero_classes)
     mana_cost = models.PositiveIntegerField(blank=False)
     rarity = models.CharField(max_length=9, blank=False, choices=rarities)
     image = models.ImageField(upload_to='card_images', blank=False)
