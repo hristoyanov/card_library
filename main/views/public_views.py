@@ -44,6 +44,12 @@ class ExpansionSetCardListView(ListView):
 
         return cards
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['set'] = get_object_or_404(ExpansionSet, pk=self.kwargs.get('pk'))
+
+        return context
+
 
 class CardDetailView(DetailView):
     """Renders a detailed look of a specific card."""
