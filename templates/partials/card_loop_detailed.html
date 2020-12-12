@@ -1,3 +1,5 @@
+{% load is_card_collected %}
+
 <div class="container">
     <div class="row">
         {% for card in cards %}
@@ -5,6 +7,9 @@
                 <div class="card m-3">
                     <img class="card-img-top" src="{{ card.image.url }}" alt="Card image cap">
                     <div class="card-body">
+                        {% if user.is_authenticated %}
+                            <p class="card-text">{% is_card_collected request.user card %}</p>
+                        {% endif %}
                         <div class="text-center">
                             <a href="{% url 'card_detail' card.id %}" class="btn btn-dark btn-sm">Card details</a>
                             {% if user.is_authenticated %}
