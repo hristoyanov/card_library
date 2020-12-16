@@ -154,7 +154,7 @@ def remove_collected_card_copies(request, pk):
             else:
                 card.save()
 
-            return redirect(get_next_url(request.POST))
+            return redirect('user_collection')
 
         context = {
             'form': form,
